@@ -1,0 +1,124 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #333;
+    color: white;
+
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+
+    main {
+        flex: 1;
+    }
+
+    footer {
+        text-align: center;
+    }
+}
+
+.error {
+    color: lightcoral;
+}
+
+.title {
+    font-size: 1.5rem;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 1rem;
+    margin: 0.5rem 0;
+}
+
+header {
+    border-bottom: 2px solid #555;
+    padding: 0.5rem 1rem;
+}
+
+.navbar {
+    font-size: 1.5rem;
+    padding: 0.5rem 1rem;
+    display: flex;
+    gap: 1rem;
+
+    a {
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        background-color: lightslategray;
+        color: antiquewhite;
+        text-decoration: none;
+    }
+}
+
+.plats-form,
+.login-form,
+.register-form {
+    padding: 1rem;
+    margin: 2rem auto;
+    border-radius: 0.5rem;
+    background-color: #444;
+    width: fit-content;
+
+    input {
+        padding: 0.5rem;
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+
+    input[type="submit"] {
+        background-color: burlywood;
+        cursor: pointer;
+    }
+
+    textarea {
+        width: 20rem;
+        height: 10rem;
+        background-color: transparent;
+        color: var(--color-text);
+        resize: none;
+    }
+}
+
+a {
+    color: antiquewhite;
+    margin-right: 0.5rem;
+}
+
+/*
+ * Table CSS
+ */
+
+table {
+    border-collapse: collapse;
+    margin: 0 auto;
+
+    a {
+        background-color: lightgreen;
+        padding: 0.4rem;
+        color: black;
+        border-radius: 0.2rem;
+        text-decoration: none;
+    }
+
+    a:hover {
+        background-color: #44ffa7;
+    }
+}
+
+table,
+th,
+td {
+    border: 1px solid;
+}
+
+td,
+th {
+    padding: 1rem;
+}
