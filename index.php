@@ -8,34 +8,27 @@ require("./include/plats.php");
 
 
 // Define default entry page
-$page = "home";
+
+$allowedPages = [
+    "home" => "./views/home.php",
+    "register" => "./views/register.php",
+    "login" => "./views/login.php",
+    "logout" => "./views/logout.php",
+    "profil" => "./views/profil.php",
+    "plats" => "./views/plats.php",
+    "addplats" => "./views/addplats.php",
+    "editplats" => "./views/editplats.php",
+    "delplats" => "./views/delplats.php"
+];
+
+$pageUrl = $allowedPages['home'];
 
 if (isset($_GET["page"]) && !empty($_GET["page"])) {
     $reqPage = trim(htmlspecialchars($_GET["page"]));
 
-    $allowedPages = ['home', 'register', 'login', 'logout', "profil",
-                     "plats", "addplats", "editplats", "delplats" ];
-    if (in_array($reqPage, $allowedPages)) {
-        $page = $reqPage;
+    if (key_exists($reqPage, $allowedPages)) {
+        $pageUrl = $allowedPages[$reqPage];
     }
 }
 
-if ($page === "home") {
-    require("./views/home.php");
-} elseif ($page === "register") {
-    require("./views/register.php");
-} elseif ($page === "login") {
-    require("./views/login.php");
-} elseif ($page === "logout") {
-    require("./views/logout.php");
-} elseif ($page === "profil") {
-    require("./views/profil.php");
-} elseif ($page === "plats") {
-    require("./views/plats.php");
-} elseif ($page === "addplats") {
-    require("./views/addplats.php");
-} elseif ($page === "editplats") {
-    require("./views/editplats.php");
-} elseif ($page === "delplats") {
-    require("./views/delplats.php");
-}
+require($pageUrl);

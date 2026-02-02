@@ -9,6 +9,33 @@ function isLoggedIn()
     return false;
 }
 
+function logoutCuisiniers()
+{
+    session_destroy();
+}
+
+function loginCuisiniers($pdo, $email, $password)
+{
+    $sql = "SELECT * FROM cuisiniers WHERE email = :email";
+    $stmt = $pdo->prepare($sql);
+    $state = $stmt->execute([":email" => $email]);
+
+    if (!$state)
+        return false;
+
+    $cuisinier = $stmt->fetch();
+    if ($cuisinier === false)
+        return false;
+
+    if (!password_verify($password, $cuisinier["password"]))
+        return false;
+
+    $_SESSION["user_id"] = $cuisinier["id_cuisinier"];
+    $_SESSION["name"] = $cuisinier["nom"];
+
+    return true;
+}
+
 function isEmailInCuisiniers($pdo, $email)
 {
     $sql = "SELECT COUNT(*) AS nb FROM cuisiniers WHERE email = :email";
@@ -40,34 +67,12 @@ function registerCuisiniers($pdo, $nom, $specialite, $email, $password, $avatar)
     return $state;
 }
 
-function loginCuisiniers($pdo, $email, $password)
-{
-    $sql = "SELECT * FROM cuisiniers WHERE email = :email";
-    $stmt = $pdo->prepare($sql);
-    $state = $stmt->execute([":email" => $email]);
-    
-    if (!$state)
-        return false;
-
-    $cuisinier = $stmt->fetch();
-    if ($cuisinier === false)
-        return false;
-
-    if (!password_verify($password, $cuisinier["password"]))
-        return false;
-
-    $_SESSION["user_id"] = $cuisinier["id_cuisinier"];
-    $_SESSION["name"] = $cuisinier["nom"];
-
-    return true;
-}
-
 function getCuisinierByEmail($pdo, $email)
 {
     $sql = "SELECT * FROM cuisiniers WHERE email = :email";
     $stmt = $pdo->prepare($sql);
     $state = $stmt->execute([":email" => $email]);
-    
+
     if (!$state)
         return false;
 
@@ -83,7 +88,7 @@ function getCuisinierById($pdo, $idCuisinier)
     $sql = "SELECT * FROM cuisiniers WHERE id_cuisinier = :id_cuisinier";
     $stmt = $pdo->prepare($sql);
     $state = $stmt->execute([":id_cuisinier" => $idCuisinier]);
-    
+
     if (!$state)
         return false;
 
@@ -94,21 +99,28 @@ function getCuisinierById($pdo, $idCuisinier)
     return $cuisinier;
 }
 
-function updateCuisiniers($pdo, $idCuisinier, $nom, $specialite, $email, $avatar)
+function updateCuisiniers($pdo, $idCuisinier, $nom, $specialite, $email)
 {
-    $sql = "UPDATE cuisiniers SET nom = :nom, specialite = :specialite, email = :email, avatar = :avatar WHERE id_cuisinier = :id_cuisinier";
+    $sql = "UPDATE cuisiniers SET nom = :nom, specialite = :specialite, email = :email WHERE id_cuisinier = :id_cuisinier";
     $stmt = $pdo->prepare($sql);
     $state = $stmt->execute([
         ":nom" => $nom,
         ":specialite" => $specialite,
         ":email" => $email,
-        ":avatar" => $avatar,
         ":id_cuisinier" => $idCuisinier
     ]);
 
     return $state;
 }
 
-function logoutCuisiniers() {
-    session_destroy();
+function updateCuisiniersAvatar($pdo, $idCuisinier, $avatar)
+{
+    $sql = "UPDATE cuisiniers SET avatar = :avatar WHERE id_cuisinier = :id_cuisinier";
+    $stmt = $pdo->prepare($sql);
+    $state = $stmt->execute([
+        ":id_cuisinier" => $idCuisinier,
+        ":avatar" => $avatar
+    ]);
+
+    return $state;
 }

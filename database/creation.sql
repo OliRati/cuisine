@@ -6,9 +6,9 @@ CREATE DATABASE IF NOT EXISTS `cuisine` DEFAULT CHARACTER SET utf8mb4 COLLATE ut
 
 USE `cuisine`;
 
-DROP TABLE IF EXISTS `cuisiniers`;
 DROP TABLE IF EXISTS `plats`;
 DROP TABLE IF EXISTS `categories`;
+DROP TABLE IF EXISTS `cuisiniers`;
 
 CREATE TABLE `cuisiniers` (
     `id_cuisinier` INT NOT NULL AUTO_INCREMENT,

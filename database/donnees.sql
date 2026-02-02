@@ -2,6 +2,9 @@
 
 USE cuisine;
 
+INSERT INTO `categories` (`id_categorie`, `nom`) VALUES
+(1, 'Plats salés');
+
 INSERT INTO `cuisiniers` (`id_cuisinier`, `nom`, `specialite`, `email`, `password`, `avatar`) VALUES
 (1,	'Paul',	'desserts',	'paul@example.com',	'$2y$10$g7WHJa2q1DbvgfcWokNZt./XE3zaOM9c3W5WpgOcU0VBvjsTA7TCi',	'./assets/avatars/1-avatar_admin.png'),
 (3,	'Martin',	'entrées',	'martin@example.com',	'$2y$10$EbgTyd22T5aj.xywc340ref4Yp5gk6oXERmOE8Jhz8Uo1jMJ4WYPK',	''),

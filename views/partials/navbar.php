@@ -6,6 +6,7 @@
             <div><a href="?page=plats">Mes plats</a></div>
             <div><a href="?page=profil">Mon profil</a></div>
         <?php } else { ?>
+            <div><a href="?page=home">Acceuil</a></div>
             <div><a href="?page=register">Register</a></div>
             <div><a href="?page=login">Login</a></div>
         <?php } ?>

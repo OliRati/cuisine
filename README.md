@@ -1,5 +1,14 @@
 ### Utilisation de Docker pour tester le projet
 
+#### Modfication des permission
+
+Uniquement pour linux les permissions doivent être appliquées pour que le container
+puisse ecrire dans le repertoire assets ( Sauvegarde des avatars )
+
+```bash
+sudo chown -R 33:33 assets
+```
+
 Lancer la stack avec
 ```bash
 cd docker
