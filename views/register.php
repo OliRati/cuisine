@@ -5,28 +5,35 @@ $email = "";
 $specialite = "";
 $avatar = "";
 
-function uploadAvatar( $idCuisinier )
+function uploadAvatar($idCuisinier)
 {
     $errors = [];
 
     // Check if avatar was sent
-    if (!isset($_FILES['avatar']))
+    if (!isset($_FILES['avatar']) || $_FILES['avatar']['error'] === UPLOAD_ERR_NO_FILE)
         return false;
 
     // Check if avatar was sent without errors
     if ($_FILES['avatar']['error'] > 0) {
-        return "Le transfert de l'avatar n'a pas pu être effectué.";
+        $errors[] = "Le transfert de l'avatar n'a pas pu être effectué.";
+        return false;
     }
-    
-    if (!preg_match("/(jpg)|(jpeg)|(png)|(webp)/", $_FILES['avatar']['type']))
-        return "Le type du fichier pour l'avatar doit etre jpg, jpeg, png ou webp";
 
-    if (!file_exists("./assets/avatars")) 
+    if (!preg_match("/(jpg)|(jpeg)|(png)|(webp)/", $_FILES['avatar']['type'])) {
+        $errors[] = "Le type du fichier pour l'avatar doit etre jpg, jpeg, png ou webp";
+        return false;
+    }
+
+    if (!file_exists("./assets/avatars"))
         mkdir("./assets/avatars", 0755);
 
-    move_uploaded_file($_FILES['avatar']['tmp_name'],
-                       "./assets/avatars/".$idCuisinier."-". $_FILES['avatar']['full_path']);
-    return true;
+    $avatarFilename = "./assets/avatars/" . $idCuisinier . "-" . $_FILES['avatar']['full_path'];
+    if (!move_uploaded_file($_FILES['avatar']['tmp_name'], $avatarFilename)) {
+        $errors[] = "Impossible de déplacer le fichier avatar";
+        return false;
+    }
+
+    return $avatarFilename;
 }
 
 if (isset($_POST['register']) && !empty($_POST['register'])) {
@@ -45,7 +52,7 @@ if (isset($_POST['register']) && !empty($_POST['register'])) {
     $passwordConfirm = trim($_POST['password-confirm']);
 
     if (empty($password) || empty($passwordConfirm))
-        $errors[] = "Veuillez enter un mot de passe et sa confirmation";
+        $errors[] = "Veuillez entrer un mot de passe et sa confirmation";
 
     if ($password !== $passwordConfirm)
         $errors[] = "Les mots de passe ne correspondent pas";
@@ -56,7 +63,7 @@ if (isset($_POST['register']) && !empty($_POST['register'])) {
     if (isEmailInCuisiniers($pdo, $email))
         $errors[] = "Cet email est déjà utilisé.";
 
-    if (!isset($_FILES['avatar']))
+    if (!isset($_FILES['avatar']) || $_FILES['avatar']['error'] === UPLOAD_ERR_NO_FILE)
         $errors[] = "Un avatar de moins de 2Mo au format jpg, jpeg, png, webp est requis";
 
     if (count($errors) === 0) {
@@ -66,9 +73,12 @@ if (isset($_POST['register']) && !empty($_POST['register'])) {
 
     if (count($errors) === 0) {
         $cuisinier = getCuisinierbyEmail($pdo, $email);
-        $state = uploadAvatar($cuisinier["id_cuisinier"]);
-        if ($state !== true)
+        $avatar = uploadAvatar($cuisinier["id_cuisinier"]);
+        if ($avatar === false)
             $errors[] = "Votre compte est crée. Le telechargement de votre avatar n'a pas été possible";
+        else {
+            updateCuisiniersAvatar($pdo, $cuisinier["id_cuisinier"], $avatar);
+        }
     }
 
     if (count($errors) === 0) {
